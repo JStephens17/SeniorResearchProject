@@ -29,6 +29,18 @@ public class doBattle extends prepareBattle
 			
 			int rvhCount = randomVsHeuristic(Pokemon1, Pokemon2);
 			System.out.println("Random v Heuristic: Poke1 has won: " + rvhCount + "  Poke2 has won: " + (1000-rvhCount));
+			
+			int rvmCount = randomVsMinMax(Pokemon1, Pokemon2);
+			System.out.println("Random v MinMax: Poke1 has won: " + rvmCount + "  Poke2 has won: " + (1000-rvmCount));
+			
+			int hvrCount = heuristicVsRandom(Pokemon1, Pokemon2);
+			System.out.println("Heuristic v Random: Poke1 has won: " + hvrCount + "  Poke2 has won: " + (1000-hvrCount));
+			
+			int hvhCount = heuristicVsHeuristic(Pokemon1, Pokemon2);
+			System.out.println("Heuristic v Heuristic: Poke1 has won: " + hvhCount + "  Poke2 has won: " + (1000-hvhCount));
+			
+			int hvmCount = heuristicVsMinMax(Pokemon1, Pokemon2);
+			System.out.println("Heuristic v MinMax: Poke1 has won: " + hvmCount + "  Poke2 has won: " + (1000-hvmCount));
 		}
 	}
 	
@@ -104,6 +116,21 @@ public class doBattle extends prepareBattle
 		return move;
 	}
 	
+	static int getMinMaxMove(double[] Pokemon)
+	{
+		int move = 0;
+		double maxMove = 0;
+		for(int x=0; x<4; x++)
+		{
+			if(maxMove < (Pokemon[x] * Pokemon[x+3]))
+			{
+				maxMove = Pokemon[x] * Pokemon[x+3];
+				move = x;
+			}
+		}
+		return move;
+	}
+	
 	/*
 	 * The random versus random match-up for all 3 battles.
 	 * This method takes 2 Pokemon as input, and has them battle until one of their health stats goes below zero.
@@ -133,7 +160,7 @@ public class doBattle extends prepareBattle
 			        if(calcAccuracy <= accuracy*100)	//Move hits
 			        {
 			        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
-			        	damage = damage / ((Pokemon1[9] * 50) + 2);
+			        	damage = damage / ((Pokemon2[9] * 50) + 2);
 			        	Pokemon2HP = Pokemon2HP - damage;
 			        }
 			        else
@@ -160,7 +187,7 @@ public class doBattle extends prepareBattle
 				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
 				        {
 				        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
-				        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+				        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
 				        	Pokemon1HP = Pokemon1HP - damage2;
 				        }
 				        else
@@ -187,7 +214,7 @@ public class doBattle extends prepareBattle
 			        if(calcAccuracy <= accuracy*100)	//Move hits
 			        {
 			        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
-			        	damage = damage / ((Pokemon2[9] * 50) + 2);
+			        	damage = damage / ((Pokemon1[9] * 50) + 2);
 			        	Pokemon1HP = Pokemon1HP - damage;
 			        }
 			        else
@@ -200,12 +227,12 @@ public class doBattle extends prepareBattle
 			        	//System.out.println("Pokemon 2 wins");
 			        }
 			        
-			        else //Pokemon 2 still alive, get move and attempt to use it
+			        else //Pokemon 1 still alive, get move and attempt to use it
 			        {
 			        	int move2 = getRandomMove();
 						//System.out.println("Move two is: " + move2);
 						
-						double accuracy2 = Pokemon2[move2 + 4];
+						double accuracy2 = Pokemon1[move2 + 4];
 						Random rand2 = new Random();	  
 				        int calcAccuracy2 = rand.nextInt(100);  //1-100
 				        calcAccuracy2++;
@@ -213,7 +240,7 @@ public class doBattle extends prepareBattle
 				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
 				        {
 				        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
-				        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+				        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
 				        	Pokemon2HP = Pokemon2HP - damage2;
 				        }
 				        else
@@ -246,7 +273,7 @@ public class doBattle extends prepareBattle
 				        if(calcAccuracy <= accuracy*100)	//Move hits
 				        {
 				        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
-				        	damage = damage / ((Pokemon1[9] * 50) + 2);
+				        	damage = damage / ((Pokemon2[9] * 50) + 2);
 				        	Pokemon2HP = Pokemon2HP - damage;
 				        }
 				        else
@@ -265,7 +292,7 @@ public class doBattle extends prepareBattle
 				        	int move2 = getRandomMove();
 							//System.out.println("Move two is: " + move2);
 							
-							double accuracy2 = Pokemon1[move2 + 4];
+							double accuracy2 = Pokemon2[move2 + 4];
 							Random rand2 = new Random();	  
 					        int calcAccuracy2 = rand.nextInt(100);  //1-100
 					        calcAccuracy2++;
@@ -273,7 +300,7 @@ public class doBattle extends prepareBattle
 					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
 					        {
 					        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
-					        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+					        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
 					        	Pokemon1HP = Pokemon1HP - damage2;
 					        }
 					        else
@@ -300,7 +327,7 @@ public class doBattle extends prepareBattle
 				        if(calcAccuracy <= accuracy*100)	//Move hits
 				        {
 				        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
-				        	damage = damage / ((Pokemon2[9] * 50) + 2);
+				        	damage = damage / ((Pokemon1[9] * 50) + 2);
 				        	Pokemon1HP = Pokemon1HP - damage;
 				        }
 				        else
@@ -313,12 +340,12 @@ public class doBattle extends prepareBattle
 				        	winner = true;
 				        	//System.out.println("Pokemon 2 wins");
 				        }   
-				        else //Pokemon 2 still alive, get move and attempt to use it
+				        else //Pokemon 1 still alive, get move and attempt to use it
 				        {
 				        	int move2 = getRandomMove();
 							//System.out.println("Move two is: " + move2);
 							
-							double accuracy2 = Pokemon2[move2 + 4];
+							double accuracy2 = Pokemon1[move2 + 4];
 							Random rand2 = new Random();	  
 					        int calcAccuracy2 = rand.nextInt(100);  //1-100
 					        calcAccuracy2++;
@@ -326,7 +353,7 @@ public class doBattle extends prepareBattle
 					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
 					        {
 					        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
-					        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+					        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
 					        	Pokemon2HP = Pokemon2HP - damage2;
 					        }
 					        else
@@ -371,7 +398,7 @@ public class doBattle extends prepareBattle
 			        if(calcAccuracy <= accuracy*100)	//Move hits
 			        {
 			        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
-			        	damage = damage / ((Pokemon1[9] * 50) + 2);
+			        	damage = damage / ((Pokemon2[9] * 50) + 2);
 			        	Pokemon2HP = Pokemon2HP - damage;
 			        }
 			        else
@@ -390,7 +417,7 @@ public class doBattle extends prepareBattle
 			        	int move2 = getHeuristicMove(1, Pokemon2HP, Pokemon1HP, Pokemon2[11]);
 						//System.out.println("Move two is: " + move2);
 						
-						double accuracy2 = Pokemon1[move2 + 4];
+						double accuracy2 = Pokemon2[move2 + 4];
 						Random rand2 = new Random();	  
 				        int calcAccuracy2 = rand.nextInt(100);  //1-100
 				        calcAccuracy2++;
@@ -398,7 +425,7 @@ public class doBattle extends prepareBattle
 				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
 				        {
 				        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
-				        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+				        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
 				        	Pokemon1HP = Pokemon1HP - damage2;
 				        }
 				        else
@@ -425,7 +452,7 @@ public class doBattle extends prepareBattle
 			        if(calcAccuracy <= accuracy*100)	//Move hits
 			        {
 			        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
-			        	damage = damage / ((Pokemon2[9] * 50) + 2);
+			        	damage = damage / ((Pokemon1[9] * 50) + 2);
 			        	Pokemon1HP = Pokemon1HP - damage;
 			        }
 			        else
@@ -438,12 +465,12 @@ public class doBattle extends prepareBattle
 			        	//System.out.println("Pokemon 2 wins");
 			        }
 			        
-			        else //Pokemon 2 still alive, get move and attempt to use it
+			        else //Pokemon 1 still alive, get move and attempt to use it
 			        {
 			        	int move2 = getRandomMove();
 						//System.out.println("Move two is: " + move2);
 						
-						double accuracy2 = Pokemon2[move2 + 4];
+						double accuracy2 = Pokemon1[move2 + 4];
 						Random rand2 = new Random();	  
 				        int calcAccuracy2 = rand.nextInt(100);  //1-100
 				        calcAccuracy2++;
@@ -451,7 +478,7 @@ public class doBattle extends prepareBattle
 				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
 				        {
 				        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
-				        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+				        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
 				        	Pokemon2HP = Pokemon2HP - damage2;
 				        }
 				        else
@@ -484,7 +511,7 @@ public class doBattle extends prepareBattle
 				        if(calcAccuracy <= accuracy*100)	//Move hits
 				        {
 				        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
-				        	damage = damage / ((Pokemon1[9] * 50) + 2);
+				        	damage = damage / ((Pokemon2[9] * 50) + 2);
 				        	Pokemon2HP = Pokemon2HP - damage;
 				        }
 				        else
@@ -503,7 +530,7 @@ public class doBattle extends prepareBattle
 				        	int move2 = getHeuristicMove(1, Pokemon2HP, Pokemon1HP, Pokemon2[11]);
 							//System.out.println("Move two is: " + move2);
 							
-							double accuracy2 = Pokemon1[move2 + 4];
+							double accuracy2 = Pokemon2[move2 + 4];
 							Random rand2 = new Random();	  
 					        int calcAccuracy2 = rand.nextInt(100);  //1-100
 					        calcAccuracy2++;
@@ -511,7 +538,7 @@ public class doBattle extends prepareBattle
 					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
 					        {
 					        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
-					        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+					        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
 					        	Pokemon1HP = Pokemon1HP - damage2;
 					        }
 					        else
@@ -538,7 +565,7 @@ public class doBattle extends prepareBattle
 				        if(calcAccuracy <= accuracy*100)	//Move hits
 				        {
 				        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
-				        	damage = damage / ((Pokemon2[9] * 50) + 2);
+				        	damage = damage / ((Pokemon1[9] * 50) + 2);
 				        	Pokemon1HP = Pokemon1HP - damage;
 				        }
 				        else
@@ -551,12 +578,12 @@ public class doBattle extends prepareBattle
 				        	winner = true;
 				        	//System.out.println("Pokemon 2 wins");
 				        }   
-				        else //Pokemon 2 still alive, get move and attempt to use it
+				        else //Pokemon 1 still alive, get move and attempt to use it
 				        {
 				        	int move2 = getRandomMove();
 							//System.out.println("Move two is: " + move2);
 							
-							double accuracy2 = Pokemon2[move2 + 4];
+							double accuracy2 = Pokemon1[move2 + 4];
 							Random rand2 = new Random();	  
 					        int calcAccuracy2 = rand.nextInt(100);  //1-100
 					        calcAccuracy2++;
@@ -564,7 +591,7 @@ public class doBattle extends prepareBattle
 					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
 					        {
 					        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
-					        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+					        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
 					        	Pokemon2HP = Pokemon2HP - damage2;
 					        }
 					        else
@@ -585,4 +612,899 @@ public class doBattle extends prepareBattle
 		}
 		return rhCount;
 	}
+	
+	static int randomVsMinMax(double[] Pokemon1, double[] Pokemon2)
+	{
+		int rmCount = 0;
+		for(int battleNumber = 0; battleNumber < 1000; battleNumber++)		//0-1000
+		{
+			double Pokemon1HP = Pokemon1[11];	//reset health after every battle
+			double Pokemon2HP = Pokemon2[11];
+			boolean winner = false;
+			while(winner == false)
+			{	
+				if (Pokemon1[10] > Pokemon2[10])		//Pokemon 1 is faster
+				{
+					int move1 = getRandomMove();
+					//System.out.println("Move one is: " + move1);
+					
+					double accuracy = Pokemon1[move1 + 4];
+					Random rand = new Random();	  
+			        int calcAccuracy = rand.nextInt(100);  //1-100
+			        calcAccuracy++;
+			        
+			        if(calcAccuracy <= accuracy*100)	//Move hits
+			        {
+			        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
+			        	damage = damage / ((Pokemon2[9] * 50) + 2);
+			        	Pokemon2HP = Pokemon2HP - damage;
+			        }
+			        else
+			        {
+			        	//System.out.println("Move missed");
+			        }
+			        if(Pokemon2HP <= 0)
+			        {
+			        	winner = true;
+			        	rmCount++;
+			        	//System.out.println("Pokemon 1 wins");
+			        }
+			        
+			        else //Pokemon 2 still alive, get move and attempt to use it
+			        {
+			        	int move2 = getMinMaxMove(Pokemon2);
+						//System.out.println("Move two is: " + move2);
+						
+						double accuracy2 = Pokemon2[move2 + 4];
+						Random rand2 = new Random();	  
+				        int calcAccuracy2 = rand.nextInt(100);  //1-100
+				        calcAccuracy2++;
+				        
+				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+				        {
+				        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
+				        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+				        	Pokemon1HP = Pokemon1HP - damage2;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        if(Pokemon1HP <= 0)
+				        {
+				        	winner = true;
+				        	//System.out.println("Pokemon 2 wins");
+				        }
+			        }
+				}
+				else if(Pokemon2[10] > Pokemon1[10])	//Pokemon 2 is faster
+				{
+					int move1 = getMinMaxMove(Pokemon2);
+					//System.out.println("Move one is: " + move1);
+					
+					double accuracy = Pokemon2[move1 + 4];
+					Random rand = new Random();	  
+			        int calcAccuracy = rand.nextInt(100);  //1-100
+			        calcAccuracy++;
+			        
+			        if(calcAccuracy <= accuracy*100)	//Move hits
+			        {
+			        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
+			        	damage = damage / ((Pokemon1[9] * 50) + 2);
+			        	Pokemon1HP = Pokemon1HP - damage;
+			        }
+			        else
+			        {
+			        	//System.out.println("Move missed");
+			        }
+			        if(Pokemon1HP <= 0)
+			        {
+			        	winner = true;
+			        	//System.out.println("Pokemon 2 wins");
+			        }
+			        
+			        else //Pokemon 1 still alive, get move and attempt to use it
+			        {
+			        	int move2 = getRandomMove();
+						//System.out.println("Move two is: " + move2);
+						
+						double accuracy2 = Pokemon1[move2 + 4];
+						Random rand2 = new Random();	  
+				        int calcAccuracy2 = rand.nextInt(100);  //1-100
+				        calcAccuracy2++;
+				        
+				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+				        {
+				        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
+				        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+				        	Pokemon2HP = Pokemon2HP - damage2;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        if(Pokemon2HP <= 0)
+				        {
+				        	winner = true;
+				        	rmCount++;
+				        	//System.out.println("Pokemon 1 wins");
+				        }
+			        }
+				}
+				else	//speed tie, need random tie-break
+				{
+					Random spdTie = new Random();	  
+			        int speedTie = spdTie.nextInt(2);
+			        
+			        if(speedTie == 0)	//Squirtle wins speed tie
+			        {
+			        	int move1 = getRandomMove();
+						//System.out.println("Move one is: " + move1);
+						
+						double accuracy = Pokemon1[move1 + 4];
+						Random rand = new Random();	  
+				        int calcAccuracy = rand.nextInt(100);  //1-100
+				        calcAccuracy++;
+				        
+				        if(calcAccuracy <= accuracy*100)	//Move hits
+				        {
+				        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
+				        	damage = damage / ((Pokemon2[9] * 50) + 2);
+				        	Pokemon2HP = Pokemon2HP - damage;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        
+				        if(Pokemon2HP <= 0)
+				        {
+				        	winner = true;
+				        	rmCount++;
+				        	//System.out.println("Pokemon 1 wins");
+				        }
+				        else //Pokemon 2 still alive, get move and attempt to use it
+				        {
+				        	int move2 = getMinMaxMove(Pokemon2);
+							//System.out.println("Move two is: " + move2);
+							
+							double accuracy2 = Pokemon2[move2 + 4];
+							Random rand2 = new Random();	  
+					        int calcAccuracy2 = rand.nextInt(100);  //1-100
+					        calcAccuracy2++;
+					        
+					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+					        {
+					        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
+					        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+					        	Pokemon1HP = Pokemon1HP - damage2;
+					        }
+					        else
+					        {
+					        	//System.out.println("Move missed");
+					        }
+					        if(Pokemon1HP <= 0)
+					        {
+					        	winner = true;
+					        	//System.out.println("Pokemon 2 wins");
+					        }
+				        }
+			        }
+			        else //bulb wins speed-tie
+			        {
+			        	int move1 = getMinMaxMove(Pokemon2);
+						//System.out.println("Move one is: " + move1);
+						
+						double accuracy = Pokemon2[move1 + 4];
+						Random rand = new Random();	  
+				        int calcAccuracy = rand.nextInt(100);  //1-100
+				        calcAccuracy++;
+				        
+				        if(calcAccuracy <= accuracy*100)	//Move hits
+				        {
+				        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
+				        	damage = damage / ((Pokemon1[9] * 50) + 2);
+				        	Pokemon1HP = Pokemon1HP - damage;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        
+				        if(Pokemon1HP <= 0)
+				        {
+				        	winner = true;
+				        	//System.out.println("Pokemon 2 wins");
+				        }   
+				        else //Pokemon 1 still alive, get move and attempt to use it
+				        {
+				        	int move2 = getRandomMove();
+							//System.out.println("Move two is: " + move2);
+							
+							double accuracy2 = Pokemon1[move2 + 4];
+							Random rand2 = new Random();	  
+					        int calcAccuracy2 = rand.nextInt(100);  //1-100
+					        calcAccuracy2++;
+					        
+					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+					        {
+					        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
+					        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+					        	Pokemon2HP = Pokemon2HP - damage2;
+					        }
+					        else
+					        {
+					        	//System.out.println("Move missed");
+					        }
+					        if(Pokemon2HP <= 0)
+					        {
+					        	winner = true;
+					        	rmCount++;
+					        	//System.out.println("Pokemon 1 wins");
+					        }
+				        }
+			        }
+			        	
+				}
+			}
+		}
+		return rmCount;
+	}
+	
+	static int heuristicVsRandom(double[] Pokemon1, double[] Pokemon2)
+	{
+		int hrCount = 0;
+		for(int battleNumber = 0; battleNumber < 1000; battleNumber++)		//0-1000
+		{
+			double Pokemon1HP = Pokemon1[11];	//reset health after every battle
+			double Pokemon2HP = Pokemon2[11];
+			boolean winner = false;
+			while(winner == false)
+			{	
+				if (Pokemon1[10] > Pokemon2[10])		//Pokemon 1 is faster
+				{
+					int move1 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);
+					
+					double accuracy = Pokemon1[move1 + 4];
+					Random rand = new Random();	  
+			        int calcAccuracy = rand.nextInt(100);  //1-100
+			        calcAccuracy++;
+			        
+			        if(calcAccuracy <= accuracy*100)	//Move hits
+			        {
+			        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
+			        	damage = damage / ((Pokemon2[9] * 50) + 2);
+			        	Pokemon2HP = Pokemon2HP - damage;
+			        }
+			        else
+			        {
+			        	//System.out.println("Move missed");
+			        }
+			        if(Pokemon2HP <= 0)
+			        {
+			        	winner = true;
+			        	hrCount++;
+			        }
+			        
+			        else //Pokemon 2 still alive, get move and attempt to use it
+			        {
+			        	int move2 = getRandomMove();
+						
+						double accuracy2 = Pokemon2[move2 + 4];
+						Random rand2 = new Random();	  
+				        int calcAccuracy2 = rand.nextInt(100);  //1-100
+				        calcAccuracy2++;
+				        
+				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+				        {
+				        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
+				        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+				        	Pokemon1HP = Pokemon1HP - damage2;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        if(Pokemon1HP <= 0)
+				        {
+				        	winner = true;
+				        }
+			        }
+				}
+				else if(Pokemon2[10] > Pokemon1[10])	//Pokemon 2 is faster
+				{
+					int move1 = getRandomMove();					
+					double accuracy = Pokemon2[move1 + 4];
+					Random rand = new Random();	  
+			        int calcAccuracy = rand.nextInt(100);  //1-100
+			        calcAccuracy++;
+			        
+			        if(calcAccuracy <= accuracy*100)	//Move hits
+			        {
+			        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
+			        	damage = damage / ((Pokemon1[9] * 50) + 2);
+			        	Pokemon1HP = Pokemon1HP - damage;
+			        }
+			        else
+			        {
+			        	//System.out.println("Move missed");
+			        }
+			        if(Pokemon1HP <= 0)
+			        {
+			        	winner = true;
+			        }
+			        
+			        else //Pokemon 1 still alive, get move and attempt to use it
+			        {
+			        	int move2 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);	
+						
+						double accuracy2 = Pokemon1[move2 + 4];
+						Random rand2 = new Random();	  
+				        int calcAccuracy2 = rand.nextInt(100);  //1-100
+				        calcAccuracy2++;
+				        
+				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+				        {
+				        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
+				        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+				        	Pokemon2HP = Pokemon2HP - damage2;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        if(Pokemon2HP <= 0)
+				        {
+				        	winner = true;
+				        	hrCount++;
+				        }
+			        }
+				}
+				else	//speed tie, need random tie-break
+				{
+					Random spdTie = new Random();	  
+			        int speedTie = spdTie.nextInt(2);
+			        
+			        if(speedTie == 0)	//Squirtle wins speed tie
+			        {
+			        	int move1 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);				
+						double accuracy = Pokemon1[move1 + 4];
+						Random rand = new Random();	  
+				        int calcAccuracy = rand.nextInt(100);  //1-100
+				        calcAccuracy++;
+				        
+				        if(calcAccuracy <= accuracy*100)	//Move hits
+				        {
+				        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
+				        	damage = damage / ((Pokemon2[9] * 50) + 2);
+				        	Pokemon2HP = Pokemon2HP - damage;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        
+				        if(Pokemon2HP <= 0)
+				        {
+				        	winner = true;
+				        	hrCount++;
+				        }
+				        else //Pokemon 2 still alive, get move and attempt to use it
+				        {
+				        	int move2 = getRandomMove();
+							
+							double accuracy2 = Pokemon2[move2 + 4];
+							Random rand2 = new Random();	  
+					        int calcAccuracy2 = rand.nextInt(100);  //1-100
+					        calcAccuracy2++;
+					        
+					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+					        {
+					        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
+					        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+					        	Pokemon1HP = Pokemon1HP - damage2;
+					        }
+					        else
+					        {
+					        	//System.out.println("Move missed");
+					        }
+					        if(Pokemon1HP <= 0)
+					        {
+					        	winner = true;
+					        }
+				        }
+			        }
+			        else //bulb wins speed-tie
+			        {
+			        	int move1 = getRandomMove();
+						
+						double accuracy = Pokemon2[move1 + 4];
+						Random rand = new Random();	  
+				        int calcAccuracy = rand.nextInt(100);  //1-100
+				        calcAccuracy++;
+				        
+				        if(calcAccuracy <= accuracy*100)	//Move hits
+				        {
+				        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
+				        	damage = damage / ((Pokemon1[9] * 50) + 2);
+				        	Pokemon1HP = Pokemon1HP - damage;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        
+				        if(Pokemon1HP <= 0)
+				        {
+				        	winner = true;
+				        }   
+				        else //Pokemon 2 still alive, get move and attempt to use it
+				        {
+				        	int move2 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);		
+							double accuracy2 = Pokemon1[move2 + 4];
+							Random rand2 = new Random();	  
+					        int calcAccuracy2 = rand.nextInt(100);  //1-100
+					        calcAccuracy2++;
+					        
+					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+					        {
+					        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
+					        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+					        	Pokemon2HP = Pokemon2HP - damage2;
+					        }
+					        else
+					        {
+					        	//System.out.println("Move missed");
+					        }
+					        if(Pokemon2HP <= 0)
+					        {
+					        	winner = true;
+					        	hrCount++;
+					        }
+				        }
+			        }
+			        	
+				}
+			}
+		}
+		return hrCount;
+	}//heuristic v random
+	
+	static int heuristicVsHeuristic(double[] Pokemon1, double[] Pokemon2)
+	{
+		int hhCount = 0;
+		for(int battleNumber = 0; battleNumber < 1000; battleNumber++)		//0-1000
+		{
+			double Pokemon1HP = Pokemon1[11];	//reset health after every battle
+			double Pokemon2HP = Pokemon2[11];
+			boolean winner = false;
+			while(winner == false)
+			{	
+				if (Pokemon1[10] > Pokemon2[10])		//Pokemon 1 is faster
+				{
+					int move1 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);
+					
+					double accuracy = Pokemon1[move1 + 4];
+					Random rand = new Random();	  
+			        int calcAccuracy = rand.nextInt(100);  //1-100
+			        calcAccuracy++;
+			        
+			        if(calcAccuracy <= accuracy*100)	//Move hits
+			        {
+			        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
+			        	damage = damage / ((Pokemon2[9] * 50) + 2);
+			        	Pokemon2HP = Pokemon2HP - damage;
+			        }
+			        else
+			        {
+			        	//System.out.println("Move missed");
+			        }
+			        if(Pokemon2HP <= 0)
+			        {
+			        	winner = true;
+			        	hhCount++;
+			        }
+			        
+			        else //Pokemon 2 still alive, get move and attempt to use it
+			        {
+			        	int move2 = getHeuristicMove(0, Pokemon2HP, Pokemon1HP, Pokemon2[11]);
+						
+						double accuracy2 = Pokemon2[move2 + 4];
+						Random rand2 = new Random();	  
+				        int calcAccuracy2 = rand.nextInt(100);  //1-100
+				        calcAccuracy2++;
+				        
+				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+				        {
+				        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
+				        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+				        	Pokemon1HP = Pokemon1HP - damage2;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        if(Pokemon1HP <= 0)
+				        {
+				        	winner = true;
+				        }
+			        }
+				}
+				else if(Pokemon2[10] > Pokemon1[10])	//Pokemon 2 is faster
+				{
+					int move1 = getHeuristicMove(0, Pokemon2HP, Pokemon1HP, Pokemon2[11]);					
+					double accuracy = Pokemon2[move1 + 4];
+					Random rand = new Random();	  
+			        int calcAccuracy = rand.nextInt(100);  //1-100
+			        calcAccuracy++;
+			        
+			        if(calcAccuracy <= accuracy*100)	//Move hits
+			        {
+			        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
+			        	damage = damage / ((Pokemon1[9] * 50) + 2);
+			        	Pokemon1HP = Pokemon1HP - damage;
+			        }
+			        else
+			        {
+			        	//System.out.println("Move missed");
+			        }
+			        if(Pokemon1HP <= 0)
+			        {
+			        	winner = true;
+			        }
+			        
+			        else //Pokemon 1 still alive, get move and attempt to use it
+			        {
+			        	int move2 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);
+						
+						double accuracy2 = Pokemon1[move2 + 4];
+						Random rand2 = new Random();	  
+				        int calcAccuracy2 = rand.nextInt(100);  //1-100
+				        calcAccuracy2++;
+				        
+				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+				        {
+				        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
+				        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+				        	Pokemon2HP = Pokemon2HP - damage2;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        if(Pokemon2HP <= 0)
+				        {
+				        	winner = true;
+				        	hhCount++;
+				        }
+			        }
+				}
+				else	//speed tie, need random tie-break
+				{
+					Random spdTie = new Random();	  
+			        int speedTie = spdTie.nextInt(2);
+			        
+			        if(speedTie == 0)	//Squirtle wins speed tie
+			        {
+			        	int move1 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);				
+						double accuracy = Pokemon1[move1 + 4];
+						Random rand = new Random();	  
+				        int calcAccuracy = rand.nextInt(100);  //1-100
+				        calcAccuracy++;
+				        
+				        if(calcAccuracy <= accuracy*100)	//Move hits
+				        {
+				        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
+				        	damage = damage / ((Pokemon2[9] * 50) + 2);
+				        	Pokemon2HP = Pokemon2HP - damage;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        
+				        if(Pokemon2HP <= 0)
+				        {
+				        	winner = true;
+				        	hhCount++;
+				        }
+				        else //Pokemon 2 still alive, get move and attempt to use it
+				        {
+				        	int move2 = getHeuristicMove(0, Pokemon2HP, Pokemon1HP, Pokemon2[11]);
+							
+							double accuracy2 = Pokemon2[move2 + 4];
+							Random rand2 = new Random();	  
+					        int calcAccuracy2 = rand.nextInt(100);  //1-100
+					        calcAccuracy2++;
+					        
+					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+					        {
+					        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
+					        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+					        	Pokemon1HP = Pokemon1HP - damage2;
+					        }
+					        else
+					        {
+					        	//System.out.println("Move missed");
+					        }
+					        if(Pokemon1HP <= 0)
+					        {
+					        	winner = true;
+					        }
+				        }
+			        }
+			        else //bulb wins speed-tie
+			        {
+			        	int move1 = getHeuristicMove(0, Pokemon2HP, Pokemon1HP, Pokemon2[11]);
+						
+						double accuracy = Pokemon2[move1 + 4];
+						Random rand = new Random();	  
+				        int calcAccuracy = rand.nextInt(100);  //1-100
+				        calcAccuracy++;
+				        
+				        if(calcAccuracy <= accuracy*100)	//Move hits
+				        {
+				        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
+				        	damage = damage / ((Pokemon1[9] * 50) + 2);
+				        	Pokemon1HP = Pokemon1HP - damage;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        
+				        if(Pokemon1HP <= 0)
+				        {
+				        	winner = true;
+				        }   
+				        else //Pokemon 2 still alive, get move and attempt to use it
+				        {
+				        	int move2 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);		
+							double accuracy2 = Pokemon1[move2 + 4];
+							Random rand2 = new Random();	  
+					        int calcAccuracy2 = rand.nextInt(100);  //1-100
+					        calcAccuracy2++;
+					        
+					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+					        {
+					        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
+					        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+					        	Pokemon2HP = Pokemon2HP - damage2;
+					        }
+					        else
+					        {
+					        	//System.out.println("Move missed");
+					        }
+					        if(Pokemon2HP <= 0)
+					        {
+					        	winner = true;
+					        	hhCount++;
+					        }
+				        }
+			        }
+			        	
+				}
+			}
+		}
+		return hhCount;
+	}//heuristic v heuristic
+	
+	static int heuristicVsMinMax(double[] Pokemon1, double[] Pokemon2)
+	{
+		int hmCount = 0;
+		for(int battleNumber = 0; battleNumber < 1000; battleNumber++)		//0-1000
+		{
+			double Pokemon1HP = Pokemon1[11];	//reset health after every battle
+			double Pokemon2HP = Pokemon2[11];
+			boolean winner = false;
+			while(winner == false)
+			{	
+				if (Pokemon1[10] > Pokemon2[10])		//Pokemon 1 is faster
+				{
+					int move1 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);
+					
+					double accuracy = Pokemon1[move1 + 4];
+					Random rand = new Random();	  
+			        int calcAccuracy = rand.nextInt(100);  //1-100
+			        calcAccuracy++;
+			        
+			        if(calcAccuracy <= accuracy*100)	//Move hits
+			        {
+			        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
+			        	damage = damage / ((Pokemon2[9] * 50) + 2);
+			        	Pokemon2HP = Pokemon2HP - damage;
+			        }
+			        else
+			        {
+			        	//System.out.println("Move missed");
+			        }
+			        if(Pokemon2HP <= 0)
+			        {
+			        	winner = true;
+			        	hmCount++;
+			        }
+			        
+			        else //Pokemon 2 still alive, get move and attempt to use it
+			        {
+			        	int move2 = getMinMaxMove(Pokemon2);
+						
+						double accuracy2 = Pokemon2[move2 + 4];
+						Random rand2 = new Random();	  
+				        int calcAccuracy2 = rand.nextInt(100);  //1-100
+				        calcAccuracy2++;
+				        
+				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+				        {
+				        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
+				        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+				        	Pokemon1HP = Pokemon1HP - damage2;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        if(Pokemon1HP <= 0)
+				        {
+				        	winner = true;
+				        }
+			        }
+				}
+				else if(Pokemon2[10] > Pokemon1[10])	//Pokemon 2 is faster
+				{
+					int move1 = getMinMaxMove(Pokemon2);				
+					double accuracy = Pokemon2[move1 + 4];
+					Random rand = new Random();	  
+			        int calcAccuracy = rand.nextInt(100);  //1-100
+			        calcAccuracy++;
+			        
+			        if(calcAccuracy <= accuracy*100)	//Move hits
+			        {
+			        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
+			        	damage = damage / ((Pokemon1[9] * 50) + 2);
+			        	Pokemon1HP = Pokemon1HP - damage;
+			        }
+			        else
+			        {
+			        	//System.out.println("Move missed");
+			        }
+			        if(Pokemon1HP <= 0)
+			        {
+			        	winner = true;
+			        }
+			        
+			        else //Pokemon 1 still alive, get move and attempt to use it
+			        {
+			        	int move2 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);
+						
+						double accuracy2 = Pokemon1[move2 + 4];
+						Random rand2 = new Random();	  
+				        int calcAccuracy2 = rand.nextInt(100);  //1-100
+				        calcAccuracy2++;
+				        
+				        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+				        {
+				        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
+				        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+				        	Pokemon2HP = Pokemon2HP - damage2;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        if(Pokemon2HP <= 0)
+				        {
+				        	winner = true;
+				        	hmCount++;
+				        }
+			        }
+				}
+				else	//speed tie, need random tie-break
+				{
+					Random spdTie = new Random();	  
+			        int speedTie = spdTie.nextInt(2);
+			        
+			        if(speedTie == 0)	//Squirtle wins speed tie
+			        {
+			        	int move1 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);				
+						double accuracy = Pokemon1[move1 + 4];
+						Random rand = new Random();	  
+				        int calcAccuracy = rand.nextInt(100);  //1-100
+				        calcAccuracy++;
+				        
+				        if(calcAccuracy <= accuracy*100)	//Move hits
+				        {
+				        	double damage = (4*Pokemon1[move1]*Pokemon1[8]);
+				        	damage = damage / ((Pokemon2[9] * 50) + 2);
+				        	Pokemon2HP = Pokemon2HP - damage;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        
+				        if(Pokemon2HP <= 0)
+				        {
+				        	winner = true;
+				        	hmCount++;
+				        }
+				        else //Pokemon 2 still alive, get move and attempt to use it
+				        {
+				        	int move2 = getMinMaxMove(Pokemon2);
+							
+							double accuracy2 = Pokemon2[move2 + 4];
+							Random rand2 = new Random();	  
+					        int calcAccuracy2 = rand.nextInt(100);  //1-100
+					        calcAccuracy2++;
+					        
+					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+					        {
+					        	double damage2 = (4*Pokemon2[move2]*Pokemon2[8]);
+					        	damage2 = damage2 / ((Pokemon1[9] * 50) + 2);
+					        	Pokemon1HP = Pokemon1HP - damage2;
+					        }
+					        else
+					        {
+					        	//System.out.println("Move missed");
+					        }
+					        if(Pokemon1HP <= 0)
+					        {
+					        	winner = true;
+					        }
+				        }
+			        }
+			        else //bulb wins speed-tie
+			        {
+			        	int move1 = getMinMaxMove(Pokemon2);
+						
+						double accuracy = Pokemon2[move1 + 4];
+						Random rand = new Random();	  
+				        int calcAccuracy = rand.nextInt(100);  //1-100
+				        calcAccuracy++;
+				        
+				        if(calcAccuracy <= accuracy*100)	//Move hits
+				        {
+				        	double damage = (4*Pokemon2[move1]*Pokemon2[8]);
+				        	damage = damage / ((Pokemon1[9] * 50) + 2);
+				        	Pokemon1HP = Pokemon1HP - damage;
+				        }
+				        else
+				        {
+				        	//System.out.println("Move missed");
+				        }
+				        
+				        if(Pokemon1HP <= 0)
+				        {
+				        	winner = true;
+				        }   
+				        else //Pokemon 2 still alive, get move and attempt to use it
+				        {
+				        	int move2 = getHeuristicMove(0, Pokemon1HP, Pokemon2HP, Pokemon1[11]);		
+							double accuracy2 = Pokemon1[move2 + 4];
+							Random rand2 = new Random();	  
+					        int calcAccuracy2 = rand.nextInt(100);  //1-100
+					        calcAccuracy2++;
+					        
+					        if(calcAccuracy2 <= accuracy2*100)	//Move hits
+					        {
+					        	double damage2 = (4*Pokemon1[move2]*Pokemon1[8]);
+					        	damage2 = damage2 / ((Pokemon2[9] * 50) + 2);
+					        	Pokemon2HP = Pokemon2HP - damage2;
+					        }
+					        else
+					        {
+					        	//System.out.println("Move missed");
+					        }
+					        if(Pokemon2HP <= 0)
+					        {
+					        	winner = true;
+					        	hmCount++;
+					        }
+				        }
+			        }
+			        	
+				}
+			}
+		}
+		return hmCount;
+	}//heuristic v minmax
 }
